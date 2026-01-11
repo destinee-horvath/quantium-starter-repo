@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os 
 
 def load_and_process(file_path: str):
     """
@@ -9,8 +9,12 @@ def load_and_process(file_path: str):
     # Read CSV file into DataFrame
     df = pd.read_csv(file_path)
     
-    # Keep rows where the product is "pink morsels"
-    df = df[df["product"] == "pink morsels"].copy()
+    # Keep rows where the product is "pink morsel" (case insensitive)
+    df["product"] = df["product"].astype(str).str.strip().str.lower()
+    df = df[df["product"] == "pink morsel"].copy()
+
+    # Remove $ sign from price and convert to float 
+    df["price"] = df["price"].str.replace("$", "", regex=False).astype(float)
 
     # Create 'sales' column as quantity * price
     df["sales"] = df["quantity"] * df["price"]
