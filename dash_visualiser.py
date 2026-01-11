@@ -52,6 +52,39 @@ fig.add_vline(
     line_width=3,
 )
 
+fig.update_layout(
+    legend_title_text="Region (click to toggle)"
+)
+
+# Add annotation for price increase 
+fig.add_annotation(
+    x=pd.to_datetime("2021-01-15"),
+    y=df["sales"].max()+100,
+    text="Price increase (15 Jan 2021)",
+    showarrow=True,
+    arrowhead=2,
+    ax=80,
+    ay=-20,
+    font=dict(color=colors["text"], size=12),
+)
+
+# When hovering, show vertical and horizontal line
+fig.update_xaxes(
+    rangeslider_visible=True, # Allows zooming in & navigating on x-axis
+    showspikes=True,
+    spikemode="across",
+    spikesnap="cursor",
+    showline=True,
+    linewidth=0.5,
+)
+
+fig.update_yaxes(
+    showspikes=True,
+    spikemode="across",
+    showline=True,
+    linewidth=0.5
+)
+
 
 # Define layout of app 
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
@@ -78,7 +111,31 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     dcc.Graph(
         id='pink-morsel-sales-linechart', 
         figure=fig
-    )
+    ), 
+    
+    html.Div(
+        children=[
+            html.P("Tips:", style={"fontWeight": "bold"}),
+            html.P("- Use the slider below the chart to zoom the date range."),
+            html.P("- Click legend items to show or hide regions."),
+        ],
+        style={
+            "textAlign": "left",
+            "color": colors["text"],
+            "fontSize": "13px",
+            "fontFamily": texts["fontFamily"],
+            "marginLeft": "auto",
+            "marginRight": "50px",
+            "marginBottom": "50px",
+            "border": "1px solid #555",
+            "borderRadius": "6px",
+            "padding": "10px 14px",
+            "backgroundColor": "rgba(255, 255, 255, 0.03)",
+            "maxWidth": "420px",
+        }
+    ),
+
+    html.Br()
 ])
 
 
